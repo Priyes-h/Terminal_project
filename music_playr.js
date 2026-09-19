@@ -15,7 +15,7 @@ const songlist = ['songs/BEN_10.mp3', 'songs/POKEMON.mp3', 'songs/SPIDER_MAN.mp3
 
 function listingSongs() {
     console.clear()
-
+    // volume = 100
 
     // process.stdout.write('\x1b[2J')
     
@@ -74,6 +74,13 @@ console.log("  Ctrl+C  Exit")
 
 process.stdout.write('\x1b[8;40H')
 console.log(`🔊 Volume: ${volume}%`)
+process.stdout.write('\x1b[8;40H')
+// nextsong()
+console.log("N       Next Song")
+
+process.stdout.write('\x1b[9;40H')
+// previoussong()
+console.log("B       Previous Song")
 }}
 
 process.stdin.setRawMode(true)
@@ -121,6 +128,12 @@ process.stdin.on('data', (data) => {
  
         volumedown()
     }
+    if (data[0] === 0x6E) { // n
+    nextsong()
+}
+if(data[0] === 0x62){ // b
+    previoussong()
+}
     
 
 
@@ -169,7 +182,56 @@ function volumeup(){
     playingmusic.stdin.write(`volume ${current_volume}\n`)
     console.log(`🔊 Volume: ${volume}%`)
 }
+function previoussong(){
 
+    if(playingmusic === undefined) {
+        return
+    }
+
+    userchoice = Math.max(
+        userchoice - 1,
+        0
+    )
+
+    playingmusic.kill('SIGKILL')
+
+    elapseduration = 0
+
+    playingmusic = spawn(
+        "vlc",["--intf", "rc", songlist[userchoice]]
+    )
+
+    isPaused = false
+
+    totalduration = 0
+
+    totalProgress(songlist[userchoice])
+}
+function nextsong(){
+    
+    if(playingmusic === undefined) {
+        return
+    }
+
+    userchoice = Math.min(
+        userchoice + 1,
+        songlist.length - 1
+    )
+
+    playingmusic.kill('SIGKILL')
+
+    elapseduration = 0
+
+    playingmusic = spawn(
+        "vlc",["--intf", "rc", songlist[userchoice]]
+    )
+
+    isPaused = false
+
+    totalduration = 0
+
+    totalProgress(songlist[userchoice])
+}
 
 setInterval(() => {
 
