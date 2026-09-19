@@ -1,0 +1,119 @@
+File:           songs/SPIDER_MAN.mp3
+File type ID:   MPG3
+Num Tracks:     1
+----
+Data format:     2 ch,  44100 Hz, .mp3 (0x00000000) 0 bits/channel, 0 bytes/packet, 1152 frames/packet, 0 bytes/frame
+                no channel layout.
+estimated duration: 142.811429 sec
+audio bytes: 2285784
+audio packets: 5467
+bit rate: 128044 bits per second
+packet size upper bound: 1052
+maximum packet size: 835
+audio data file offset: 205008
+optimized
+audio 6296576 valid frames + 576 priming + 832 remainder = 6297984
+----
+
+File:           songs/SPIDER_MAN.mp3
+File type ID:   MPG3
+Num Tracks:     1
+----
+Data format:     2 ch,  44100 Hz, .mp3 (0x00000000) 0 bits/channel, 0 bytes/packet, 1152 frames/packet, 0 bytes/frame
+                no channel layout.
+estimated duration: 142.811429 sec
+audio bytes: 2285784
+audio packets: 5467
+bit rate: 128044 bits per second
+packet size upper bound: 1052
+maximum packet size: 835
+audio data file offset: 205008
+optimized
+audio 6296576 valid frames + 576 priming + 832 remainder = 6297984
+----
+
+File:           songs/POKEMON.mp3
+File type ID:   MPG3
+Num Tracks:     1
+----
+Data format:     2 ch,  44100 Hz, .mp3 (0x00000000) 0 bits/channel, 0 bytes/packet, 1152 frames/packet, 0 bytes/frame
+                no channel layout.
+estimated duration: 148.924082 sec
+audio bytes: 2493956
+audio packets: 5701
+bit rate: 133971 bits per second
+packet size upper bound: 1052
+maximum packet size: 835
+audio data file offset: 228560
+optimized
+audio 6565888 valid frames + 576 priming + 1088 remainder = 6567552
+----
+
+File:           songs/ULTIMATE_SPIDER_MAN.mp3
+File type ID:   MPG3
+Num Tracks:     1
+----
+Data format:     2 ch,  44100 Hz, .mp3 (0x00000000) 0 bits/channel, 0 bytes/packet, 1152 frames/packet, 0 bytes/frame
+                no channel layout.
+estimated duration: 88.137143 sec
+audio bytes: 1413567
+audio packets: 3374
+bit rate: 128306 bits per second
+packet size upper bound: 1052
+maximum packet size: 835
+audio data file offset: 221392
+optimized
+audio 3885056 valid frames + 576 priming + 1216 remainder = 3886848
+----
+
+File:           songs/POKEMON.mp3
+File type ID:   MPG3
+Num Tracks:     1
+----
+Data format:     2 ch,  44100 Hz, .mp3 (0x00000000) 0 bits/channel, 0 bytes/packet, 1152 frames/packet, 0 bytes/frame
+                no channel layout.
+estimated duration: 148.924082 sec
+audio bytes: 2493956
+audio packets: 5701
+bit rate: 133971 bits per second
+packet size upper bound: 1052
+maximum packet size: 835
+audio data file offset: 228560
+optimized
+audio 6565888 valid frames + 576 priming + 1088 remainder = 6567552
+----
+
+File:           songs/BEN_10.mp3
+File type ID:   MPG3
+Num Tracks:     1
+----
+Data format:     2 ch,  44100 Hz, .mp3 (0x00000000) 0 bits/channel, 0 bytes/packet, 1152 frames/packet, 0 bytes/frame
+                no channel layout.
+estimated duration: 77.897143 sec
+audio bytes: 1257927
+audio packets: 2982
+bit rate: 129188 bits per second
+packet size upper bound: 1052
+maximum packet size: 835
+audio data file offset: 186576
+optimized
+audio 3433472 valid frames + 576 priming + 1216 remainder = 3435264
+----
+
+File:           songs/SPIDER_MAN.mp3
+File type ID:   MPG3
+Num Tracks:     1
+----
+Data format:     2 ch,  44100 Hz, .mp3 (0x00000000) 0 bits/channel, 0 bytes/packet, 1152 frames/packet, 0 bytes/frame
+                no channel layout.
+estimated duration: 142.811429 sec
+audio bytes: 2285784
+audio packets: 5467
+bit rate: 128044 bits per second
+packet size upper bound: 1052
+maximum packet size: 835
+audio data file offset: 205008
+optimized
+audio 6296576 valid frames + 576 priming + 832 remainder = 6297984
+----
+
