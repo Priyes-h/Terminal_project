@@ -4,6 +4,7 @@ let userchoice = 0 // variable to store the user choice
 let ispausedmusic = true // variable to store the paused state of the music
 let elapseduration = 0
 let totalduration = 0
+let volume = 100
 const fs = require("fs");
 
  // recive input for the enter key
@@ -46,22 +47,33 @@ function listingSongs() {
 
         let empty = barLength - filled
         console.log("progress BAr below ")
-     console.log(
-    `${'#'.repeat(filled)}${' '.repeat(empty)}  ${elapseduration.toFixed(1)}/${totalduration.toFixed(1)}`)
+     console.log(`${'#'.repeat(filled)}${' '.repeat(empty)}  ${elapseduration.toFixed(1)}/${totalduration.toFixed(1)}`)
     process.stdout.write('\x1b[1;40H')
     console.log("Controls")
 
-    process.stdout.write('\x1b[2;40H')
-    console.log("↑ ↓  Select Song")
+process.stdout.write('\x1b[1;40H')
+console.log("Controls")
 
-    process.stdout.write('\x1b[3;40H')
-    console.log("Enter Play Song")
+process.stdout.write('\x1b[2;40H')
+console.log("↑ ↓     Select Song")
 
-    process.stdout.write('\x1b[4;40H')
-    console.log("P    Pause / Resume")
+process.stdout.write('\x1b[3;40H')
+console.log("Enter   Play Song")
 
-    process.stdout.write('\x1b[5;40H')
-    console.log("Ctrl+C Exit")
+process.stdout.write('\x1b[4;40H')
+console.log("P       Pause / Resume")
+
+process.stdout.write('\x1b[5;40H')
+console.log("U       Volume Up")
+
+process.stdout.write('\x1b[6;40H')
+console.log("D       Volume Down")
+
+process.stdout.write('\x1b[7;40H')
+console.log("  Ctrl+C  Exit")
+
+process.stdout.write('\x1b[8;40H')
+console.log(`🔊 Volume: ${volume}%`)
 }}
 
 process.stdin.setRawMode(true)
@@ -100,6 +112,15 @@ process.stdin.on('data', (data) => {
         console.log("p key pressed, pausing/resuming song")
 
     }
+    if (data[0] === 0x75) {       // u
+
+        volumeup()
+    }
+
+    if (data[0] === 0x64) {       // d
+ 
+        volumedown()
+    }
     
 
 
@@ -116,14 +137,40 @@ function totalProgress(songPath){
     afInfoProcess.stdout.on("data", (data) => {
 
         const rawOutput = data.toString()
-        console.log(rawOutput)
-        fs.appendFileSync("debug.txt", rawOutput + "\n");
+        // console.log(rawOutput)
+        // fs.appendFileSync("debug.txt", rawOutput + "\n");p
 
         totalduration = Number(rawOutput.split("estimated duration:")[1].split(" sec")[0]);
 
     })
 
 }
+function volumedown(){
+    if(playingmusic === undefined){
+        return 
+    }
+    volume = volume-5
+    if (volume < 0){
+        volume = 0
+    }
+    let current_volume = Math.round(volume * 2.56) // vlc dosent have standart vlume it uses 256 and 100% so i have cretd my own volume 
+    playingmusic.stdin.write(`volume ${current_volume}\n`)
+    console.log(`🔊 Volume: ${volume}%`)
+}
+function volumeup(){
+        if(playingmusic === undefined){
+        return 
+    }
+    volume = volume+5
+    if (volume > 100){
+        volume = 100
+    }
+    let current_volume = Math.round(volume * 2.56) // vlc dosent have standart vlume it uses 256 and 100% so i have cretd my own volume 
+    playingmusic.stdin.write(`volume ${current_volume}\n`)
+    console.log(`🔊 Volume: ${volume}%`)
+}
+
+
 setInterval(() => {
 
     if(
