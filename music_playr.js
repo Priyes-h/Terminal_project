@@ -47,7 +47,7 @@ function listingSongs() {
 
         let empty = barLength - filled
         console.log("progress BAr below ")
-     console.log(`${'#'.repeat(filled)}${' '.repeat(empty)}  ${elapseduration.toFixed(1)}/${totalduration.toFixed(1)}`)
+     console.log(`${'#'.repeat(filled)}${'-'.repeat(empty)}  ${elapseduration.toFixed(1)}/${totalduration.toFixed(1)}`)
     process.stdout.write('\x1b[1;40H')
     console.log("Controls")
 
@@ -129,11 +129,24 @@ process.stdin.on('data', (data) => {
         volumedown()
     }
     if (data[0] === 0x6E) { // n
-    nextsong()
+
+
+        nextsong()
 }
-if(data[0] === 0x62){ // b
+    if(data[0] === 0x62){ // b
+
+
     previoussong()
-}
+
+    
+    }   
+    if(data[0] === 0x6A){ // j
+        seek_backward()
+
+    }
+    if(data[0] === 0x6C){ // l
+        seek_forward()
+    }
     
 
 
@@ -231,6 +244,22 @@ function nextsong(){
     totalduration = 0
 
     totalProgress(songlist[userchoice])
+}
+function seek_forward(){
+    if (playingmusic === undefined) { return}
+    playingmusic.stdin.write('seek +10\n')
+    elapseduration += 10
+    if(elapseduration > totalduration) {
+        elapseduration = totalduration
+    }
+}
+function seek_backward(){
+    if (playingmusic === undefined) { return }
+    playingmusic.stdin.write('seek -10\n')
+    elapseduration -= 10
+        if(elapseduration < 0) {
+        elapseduration = 0
+    }
 }
 
 setInterval(() => {
