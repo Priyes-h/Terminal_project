@@ -5,12 +5,13 @@ let ispausedmusic = true // variable to store the paused state of the music
 let elapseduration = 0
 let totalduration = 0
 let volume = 100
+let repeat = false
 const fs = require("fs");
 
  // recive input for the enter key
 
 
-const songlist = ['songs/BEN_10.mp3', 'songs/POKEMON.mp3', 'songs/SPIDER_MAN.mp3', 'songs/ULTIMATE_SPIDER_MAN.mp3'] // list of songs
+const songlist = ['songs/BEN_10.mp3', 'songs/POKEMON.mp3', 'songs/SPIDER_MAN.mp3', 'songs/ULTIMATE_SPIDER_MAN.mp3','songs/Amazing_spiderMan.mp3','songs/Black_spiderMan.mp3','songs/Iron Man_ Armored Adventure.mp3','songs/Phineas and Ferb .mp3'] // list of songs
 
 
 function listingSongs() {
@@ -48,7 +49,7 @@ function listingSongs() {
         let empty = barLength - filled
         console.log("progress BAr below ")
      console.log(`${'#'.repeat(filled)}${'-'.repeat(empty)}  ${elapseduration.toFixed(1)}/${totalduration.toFixed(1)}`)
-    process.stdout.write('\x1b[1;44H')
+    process.stdout.write('\x1b[1;44H')}
     // console.log("Controls")
 
 process.stdout.write('\x1b[1;44H')
@@ -89,7 +90,9 @@ console.log("Q      Quit")
 
 process.stdout.write('\x1b[14;44H')
 console.log(`🔊 Volume: ${volume}%`)
-}}
+process.stdout.write('\x1b[13;44H')
+process.stdout.write(`r    Repeat: ${repeat ? 'ON' : 'OFF'}`)
+}
 
 process.stdin.setRawMode(true)
 
@@ -162,8 +165,8 @@ if(data[0] === 0x73) { // s
     shufflesong()
 }
 
-
-
+if (data[0] === 0x72 ) // r
+    togglerepeat()
 })
 
 function totalProgress(songPath){
@@ -205,7 +208,7 @@ function volumeup(){
         volume = 100
     }
     let current_volume = Math.round(volume * 2.56) // vlc dosent have standart vlume it uses 256 and 100% so i have cretd my own volume 
-    playingmusic.stdin.write(`volume ${current_volume}\n`)
+    playingmusic.stdin.write(`volume ${current_volume}\n`) // command to turn vol up 
     console.log(`🔊 Volume: ${volume}%`)
 }
 function previoussong(){
@@ -214,10 +217,11 @@ function previoussong(){
         return
     }
 
-    userchoice = Math.max(
-        userchoice - 1,
-        0
-    )
+    if(userchoice === 0) {
+        userchoice = songlist.length - 1
+    } else {
+        userchoice --
+    }
 
     playingmusic.kill('SIGKILL')
 
@@ -227,32 +231,31 @@ function previoussong(){
         "vlc",["--intf", "rc", songlist[userchoice]]
     )
 
-    isPaused = false
+    ispausedmusic = false
 
     totalduration = 0
 
     totalProgress(songlist[userchoice])
 }
-function nextsong(){
+function nextsong(){ // press n just increasinig userchoice 
     
     if(playingmusic === undefined) {
         return
     }
 
-    userchoice = Math.min(
-        userchoice + 1,
-        songlist.length - 1
-    )
+   if(userchoice === songlist.length - 1) {
+        userchoice = 0
+    } else {
+        userchoice++
+    }
 
     playingmusic.kill('SIGKILL')
 
     elapseduration = 0
 
-    playingmusic = spawn(
-        "vlc",["--intf", "rc", songlist[userchoice]]
-    )
+    playingmusic = spawn("vlc",["--intf", "rc", songlist[userchoice]])
 
-    isPaused = false
+    ispausedmusic = false
 
     totalduration = 0
 
@@ -260,40 +263,21 @@ function nextsong(){
 }
 function seek_forward(){
     if (playingmusic === undefined) { return}
-    playingmusic.stdin.write('seek +10\n')
+    playingmusic.stdin.write('seek +10\n') // command to seek 
     elapseduration += 10
     if(elapseduration > totalduration) {
         elapseduration = totalduration
     }
 }
-function seek_backward(){
+function seek_backward(){ // seeking backward by pressinh j
     if (playingmusic === undefined) { return }
-    playingmusic.stdin.write('seek -10\n')
-    elapseduration -= 10
-        if(elapseduration < 0) {
+    playingmusic.stdin.write('seek -10\n') // command to seek 
+    elapseduration -= 10 // have to decrease this also 
+        if(elapseduration < 0) { 
         elapseduration = 0
     }
 }
 
-function nextsong(){
-        if(playingmusic === undefined) return
-
-    userchoice = (userchoice + 1) % songlist.length
-
-    playingmusic.kill('SIGKILL')
-
-    elapseduration = 0
-    totalduration = 0
-
-    playingmusic = spawn(
-        "vlc",
-        ["--intf", "rc", songlist[userchoice]]
-    )
-
-    ispausedmusic = false
-
-    totalProgress(songlist[userchoice])
-}
 function shufflesong(){
 
     if(playingmusic !== undefined) {
@@ -314,17 +298,45 @@ function shufflesong(){
 
     totalProgress(songlist[userchoice])
 }
+function playingrepeatedmusic(){
+       playingmusic.kill('SIGKILL')
+
+    elapseduration = 0
+    totalduration = 0
+
+    playingmusic = spawn("vlc",["--intf", "rc", songlist[userchoice]] )
+
+    ispausedmusic = false
+
+    totalProgress(songlist[userchoice])
+
+}
+function togglerepeat(){
+    repeat = !repeat
+    if (repeat){
+        console.log("Repat:ON")
+    }else{
+        console.log("repeat : off")
+    }
+}
 setInterval(() => {
 
     if(
-        ispausedmusic === false &&playingmusic !== undefined &&totalduration > 0
+        ispausedmusic === false &&playingmusic !== undefined &&totalduration > 0 // simpley checking 
     ){
 
         elapseduration += 0.05
 
     }
-    if (elapseduration >= totalduration){
-        nextsong()
+    if ( totalduration > 0 && elapseduration >= totalduration){// auto next function 
+
+        
+        if(repeat){ // toggle repeat 
+            elapseduration = 0
+            playingrepeatedmusic()
+        }else{
+            nextsong()
+        }
     }
 
     listingSongs()
