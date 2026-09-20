@@ -48,39 +48,47 @@ function listingSongs() {
         let empty = barLength - filled
         console.log("progress BAr below ")
      console.log(`${'#'.repeat(filled)}${'-'.repeat(empty)}  ${elapseduration.toFixed(1)}/${totalduration.toFixed(1)}`)
-    process.stdout.write('\x1b[1;40H')
-    console.log("Controls")
+    process.stdout.write('\x1b[1;44H')
+    // console.log("Controls")
 
-process.stdout.write('\x1b[1;40H')
-console.log("Controls")
+process.stdout.write('\x1b[1;44H')
+console.log("---------------- CONTROLS ----------------")
 
-process.stdout.write('\x1b[2;40H')
-console.log("↑ ↓     Select Song")
+process.stdout.write('\x1b[2;44H')
+console.log("↑ ↓    Select Song")
 
-process.stdout.write('\x1b[3;40H')
-console.log("Enter   Play Song")
+process.stdout.write('\x1b[3;44H')
+console.log("Enter  Play Song")
 
-process.stdout.write('\x1b[4;40H')
-console.log("P       Pause / Resume")
+process.stdout.write('\x1b[4;44H')
+console.log("P      Pause / Resume")
 
-process.stdout.write('\x1b[5;40H')
-console.log("U       Volume Up")
+process.stdout.write('\x1b[5;44H')
+console.log("N      Next Song")
 
-process.stdout.write('\x1b[6;40H')
-console.log("D       Volume Down")
+process.stdout.write('\x1b[6;44H')
+console.log("B      Previous Song")
 
-process.stdout.write('\x1b[7;40H')
-console.log("  Ctrl+C  Exit")
+process.stdout.write('\x1b[7;44H')
+console.log("U      Volume Up")
 
-process.stdout.write('\x1b[8;40H')
+process.stdout.write('\x1b[8;44H')
+console.log("D      Volume Down")
+
+process.stdout.write('\x1b[9;44H')
+console.log("J      Seek Backward 10s")
+
+process.stdout.write('\x1b[10;44H')
+console.log("L      Seek Forward 10s")
+
+process.stdout.write('\x1b[11;44H')
+console.log("S      Shuffle")
+
+process.stdout.write('\x1b[12;44H')
+console.log("Q      Quit")
+
+process.stdout.write('\x1b[14;44H')
 console.log(`🔊 Volume: ${volume}%`)
-process.stdout.write('\x1b[8;40H')
-// nextsong()
-console.log("N       Next Song")
-
-process.stdout.write('\x1b[9;40H')
-// previoussong()
-console.log("B       Previous Song")
 }}
 
 process.stdin.setRawMode(true)
@@ -147,7 +155,12 @@ process.stdin.on('data', (data) => {
     if(data[0] === 0x6C){ // l
         seek_forward()
     }
-    
+    if (data[0] === 0x51) {
+    process.exit()
+}
+if(data[0] === 0x73) { // s
+    shufflesong()
+}
 
 
 
@@ -262,6 +275,45 @@ function seek_backward(){
     }
 }
 
+function nextsong(){
+        if(playingmusic === undefined) return
+
+    userchoice = (userchoice + 1) % songlist.length
+
+    playingmusic.kill('SIGKILL')
+
+    elapseduration = 0
+    totalduration = 0
+
+    playingmusic = spawn(
+        "vlc",
+        ["--intf", "rc", songlist[userchoice]]
+    )
+
+    ispausedmusic = false
+
+    totalProgress(songlist[userchoice])
+}
+function shufflesong(){
+
+    if(playingmusic !== undefined) {
+        playingmusic.kill('SIGKILL')
+    }
+
+    userchoice = Math.floor(Math.random() * songlist.length)
+
+    elapseduration = 0
+    totalduration = 0
+
+    playingmusic = spawn(
+        "vlc",
+        ["--intf", "rc", songlist[userchoice]]
+    )
+
+    ispausedmusic = false
+
+    totalProgress(songlist[userchoice])
+}
 setInterval(() => {
 
     if(
@@ -270,6 +322,9 @@ setInterval(() => {
 
         elapseduration += 0.05
 
+    }
+    if (elapseduration >= totalduration){
+        nextsong()
     }
 
     listingSongs()
